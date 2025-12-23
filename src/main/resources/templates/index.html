@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Course Enrollment</title>
+</head>
+<body>
+    <h1>Course Enrollment System</h1>
+
+    <div sec:authorize="isAuthenticated()">
+        <p>Welcome, <span sec:authentication="name">User</span>!</p>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Logout"/>
+        </form>
+    </div>
+
+    <div sec:authorize="hasRole('ADMIN')">
+        <h2>Admin Dashboard</h2>
+        <p>Manage users, courses, and classrooms.</p>
+        <ul>
+            <li><a th:href="@{/admin/users}">Manage Users</a></li>
+            <li><a th:href="@{/admin/courses}">Manage Courses</a></li>
+            <li><a th:href="@{/admin/classrooms}">Manage Classrooms</a></li>
+        </ul>
+    </div>
+
+    <div sec:authorize="hasRole('LECTURER')">
+        <h2>Lecturer Dashboard</h2>
+        <p>Manage your courses and schedules.</p>
+        <ul>
+            <li><a th/href="@{/lecturer/courses}">My Courses</a></li>
+            <li><a th:href="@{/lecturer/schedule}">My Schedule</a></li>
+        </ul>
+    </div>
+
+    <div sec:authorize="hasRole('STUDENT')">
+        <h2>Student Dashboard</h2>
+        <p>Enroll in courses and view your schedule.</p>
+        <ul>
+            <li><a th:href="@{/student/enroll}">Enroll in Courses</a></li>
+            <li><a th:href="@{/student/schedule}">My Schedule</a></li>
+        </ul>
+    </div>
+
+</body>
+</html>
