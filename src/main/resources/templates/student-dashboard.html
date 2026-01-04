@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Student Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        .courses-section h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .courses-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .courses-table th {
+            background-color: #3498db;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        .courses-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        .courses-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        .drop-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .drop-btn:hover {
+            background-color: #c0392b;
+        }
+        .no-courses {
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+            padding: 40px;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 6px;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #3498db;
+        }
+        .stat-label {
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>Student Dashboard</h1>
+            <p>Welcome to your learning portal</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" th:text="${#lists.size(enrollments)}">0</div>
+                <div class="stat-label">Enrolled Courses</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">85%</div>
+                <div class="stat-label">Average Progress</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">4.8</div>
+                <div class="stat-label">GPA</div>
+            </div>
+        </div>
+
+        <div class="courses-section">
+            <h2>My Enrolled Courses</h2>
+
+            <div th:if="${#lists.isEmpty(enrollments)}" class="no-courses">
+                <p>You are not enrolled in any courses yet.</p>
+                <p>Browse available courses to get started!</p>
+            </div>
+
+            <table th:if="${!#lists.isEmpty(enrollments)}" class="courses-table">
+                <thead>
+                    <tr>
+                        <th>Course ID</th>
+                        <th>Course Name</th>
+                        <th>Enrollment Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="enrollment : ${enrollments}">
+                        <td th:text="${enrollment.courseId}">CS101</td>
+                        <td th:text="${'Course ' + enrollment.courseId}">Introduction to Programming</td>
+                        <td>Jan 15, 2024</td>
+                        <td><span style="color: #27ae60; font-weight: bold;">Active</span></td>
+                        <td>
+                            <form th:action="@{/student/drop}" method="post" style="display: inline;">
+                                <input type="hidden" name="studentId" value="1">
+                                <input type="hidden" name="courseId" th:value="${enrollment.courseId}">
+                                <button type="submit" class="drop-btn"
+                                        onclick="return confirm('Are you sure you want to drop this course?')">
+                                    Drop Course
+                                </button>
+                            </form> 
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
