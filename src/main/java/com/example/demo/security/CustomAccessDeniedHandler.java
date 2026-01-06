@@ -1,4 +1,4 @@
-package com.university.enrollment.security;
+package com.example.demo.security;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,4 +23,3 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         response.sendRedirect("/error/403");
     }
 }
-
