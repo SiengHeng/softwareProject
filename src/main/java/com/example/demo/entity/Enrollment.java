@@ -1,24 +1,31 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
+import com.example.demo.entity.Course;
+import com.example.demo.entity.Student;
+
+
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "enrollments")
 public class Enrollment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne
     private Student student;
-
     @ManyToOne
     private Course course;
-
-    private String grade;
+    @Column(name = "enrollment_date")
+    private LocalDateTime enrollmentDate;
 
     public Long getId() {
         return id;
@@ -44,11 +51,11 @@ public class Enrollment {
         this.course = course;
     }
 
-    public String getGrade() {
-        return grade;
+    public LocalDateTime getEnrollmentDate() {
+        return enrollmentDate;
     }
 
-    public void setGrade(String grade) {
-        this.grade = grade;
+    public void setEnrollmentDate(LocalDateTime enrollmentDate) {
+        this.enrollmentDate = enrollmentDate;
     }
 }
