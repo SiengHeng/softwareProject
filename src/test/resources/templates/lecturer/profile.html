@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lecturer Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+<div th:replace="~{layout/header :: header}"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="~{layout/sidebar :: sidebar}"></div>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2"><i class="bi bi-person-circle me-2"></i>My Profile</h1>
+                <a th:href="@{/lecturer/edit-profile}" class="btn btn-primary">
+                    <i class="bi bi-pencil me-1"></i>Edit Profile
+                </a>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Personal Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <strong>Employee ID:</strong>
+                                    <p th:text="${lecturer.employeeId}">LEC001</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Username:</strong>
+                                    <p th:text="${lecturer.username}">john.doe</p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <strong>First Name:</strong>
+                                    <p th:text="${lecturer.firstName}">John</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Last Name:</strong>
+                                    <p th:text="${lecturer.lastName}">Doe</p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <strong>Email:</strong>
+                                    <p th:text="${lecturer.email}">john.doe@university.edu</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Phone:</strong>
+                                    <p th:text="${lecturer.phoneNumber}">123-456-7890</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">Academic Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <strong>Department:</strong>
+                                    <p th:text="${lecturer.department?.departmentName}">Computer Science</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Office Room:</strong>
+                                    <p th:text="${lecturer.officeRoom}">CS-201</p>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Specialization:</strong>
+                                <p th:text="${lecturer.specialization}">Data Structures</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card mb-3">
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                <img th:if="${lecturer.profilePictureUrl != null}"
+                                     th:src="${lecturer.profilePictureUrl}"
+                                     alt="Profile Picture"
+                                     class="rounded-circle"
+                                     style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #0d6efd;">
+                                <i th:unless="${lecturer.profilePictureUrl != null}" class="bi bi-person-circle text-primary" style="font-size: 6rem;"></i>
+                            </div>
+                            <h5 class="mt-3" th:text="${lecturer.fullName}">John Doe</h5>
+                            <p class="text-muted mb-0" th:text="${lecturer.employeeId}">LEC001</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<div th:replace="~{layout/footer :: footer}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

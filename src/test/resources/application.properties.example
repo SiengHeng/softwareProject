@@ -1,0 +1,104 @@
+ # ============================================
+# APPLICATION CONFIGURATION TEMPLATE
+# ============================================
+# Copy this file to 'application.properties' and update with your settings
+
+spring.application.name=demo-gradle
+server.port=8081
+server.error.include-message=always
+server.error.include-binding-errors=always
+
+# ============================================
+# DATABASE PROFILE SELECTION
+# ============================================
+# Choose your database by uncommenting ONE of the following:
+# Option 1: Use MySQL
+# spring.profiles.active=mysql
+
+# Option 2: Use MariaDB (Default)
+spring.profiles.active=mariadb
+
+# ============================================
+# DATABASE CONFIGURATION (Default - MariaDB)
+# ============================================
+# IMPORTANT: Update these with YOUR database credentials
+# Note: Profile-specific settings in application-{profile}.properties will override these
+spring.datasource.url=jdbc:mariadb://localhost:3306/db_university?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+spring.datasource.username=YOUR_DATABASE_USERNAME
+spring.datasource.password=YOUR_DATABASE_PASSWORD
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+
+# ============================================
+# JPA/HIBERNATE CONFIGURATION
+# ============================================
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
+spring.jpa.open-in-view=false
+spring.flyway.enabled=true
+spring.flyway.locations=classpath:db/migrations
+spring.flyway.baseline-on-migrate=true
+spring.flyway.out-of-order=true
+
+# ============================================
+# THYMELEAF CONFIGURATION
+# ============================================
+spring.thymeleaf.cache=false
+spring.thymeleaf.enabled=true
+spring.thymeleaf.prefix=classpath:/templates/
+spring.thymeleaf.suffix=.html
+spring.thymeleaf.mode=HTML
+
+# ============================================
+# LOGGING CONFIGURATION
+# ============================================
+logging.level.root=INFO
+logging.level.com.university.courseenrollment=DEBUG
+logging.level.org.springframework.security=DEBUG
+logging.level.org.hibernate.SQL=DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+
+# ============================================
+# SECURITY CONFIGURATION
+# ============================================
+spring.security.user.name=admin
+spring.security.user.password=admin123
+
+# ============================================
+# OAUTH2 CONFIGURATION (OPTIONAL)
+# ============================================
+# To enable Google/GitHub login, get credentials from:
+# Google: https://console.cloud.google.com/
+# GitHub: https://github.com/settings/developers
+
+# Google OAuth2
+spring.security.oauth2.client.registration.google.client-id=YOUR_GOOGLE_CLIENT_ID
+spring.security.oauth2.client.registration.google.client-secret=YOUR_GOOGLE_CLIENT_SECRET
+spring.security.oauth2.client.registration.google.scope=profile,email
+spring.security.oauth2.client.registration.google.redirect-uri={baseUrl}/login/oauth2/code/google
+
+# GitHub OAuth2
+spring.security.oauth2.client.registration.github.client-id=YOUR_GITHUB_CLIENT_ID
+spring.security.oauth2.client.registration.github.client-secret=YOUR_GITHUB_CLIENT_SECRET
+spring.security.oauth2.client.registration.github.scope=read:user,user:email
+spring.security.oauth2.client.registration.github.redirect-uri={baseUrl}/login/oauth2/code/github
+
+# ============================================
+# FILE UPLOAD CONFIGURATION
+# ============================================
+spring.servlet.multipart.max-file-size=10MB
+spring.servlet.multipart.max-request-size=10MB
+
+# ============================================
+# SESSION CONFIGURATION
+# ============================================
+server.servlet.session.timeout=30m
+server.servlet.session.cookie.http-only=true
+server.servlet.session.cookie.secure=false
+
+# ============================================
+# ACTUATOR CONFIGURATION (OPTIONAL)
+# ============================================
+management.endpoints.web.exposure.include=health,info
+management.endpoint.health.show-details=when-authorized

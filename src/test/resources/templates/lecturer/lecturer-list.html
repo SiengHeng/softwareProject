@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecturer List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Lecturer List</h2>
+                <div>
+                    <a th:href="@{/admin/dashboard}" class="btn btn-secondary" sec:authorize="hasRole('ADMIN')">Back to Dashboard</a>
+                </div>
+            </div>
+
+            <!-- Success/Error Messages -->
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Search Form -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form th:action="@{/lecturers}" method="get" class="row g-3">
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" name="search" th:value="${search}" 
+                                   placeholder="Search by name, employee ID, or email">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Lecturer Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">All Lecturers (<span th:text="${lecturers.size()}"></span>)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Employee ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Department</th>
+                                    <th>Phone</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="lecturer : ${lecturers}">
+                                    <td th:text="${lecturer.employeeId}"></td>
+                                    <td th:text="${lecturer.firstName + ' ' + lecturer.lastName}"></td>
+                                    <td th:text="${lecturer.email}"></td>
+                                    <td>
+                                        <span th:if="${lecturer.department != null}" th:text="${lecturer.department.departmentName}"></span>
+                                        <span th:unless="${lecturer.department != null}" class="text-muted">N/A</span>
+                                    </td>
+                                    <td th:text="${lecturer.phoneNumber}"></td>
+                                    <td>
+                                        <span th:if="${lecturer.active}" class="badge bg-success">Active</span>
+                                        <span th:unless="${lecturer.active}" class="badge bg-danger">Inactive</span>
+                                    </td>
+                                    <td>
+                                        <a th:href="@{/lecturers/{id}(id=${lecturer.id})}" class="btn btn-sm btn-info">View</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div th:if="${lecturers.isEmpty()}" class="alert alert-info">
+                            No lecturers found.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

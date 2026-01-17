@@ -1,0 +1,7 @@
+/* Global Styles */
+
+/* Scrollable dashboard lists (Admin: recent enrollments/lecturers/students/courses) */
+.dashboard-scroll {
+    max-height: 320px;
+    overflow-y: auto;
+}
