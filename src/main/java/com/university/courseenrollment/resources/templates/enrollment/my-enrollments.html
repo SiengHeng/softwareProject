@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Enrollments</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+<div th:replace="~{layout/header :: header}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="~{layout/sidebar :: sidebar}"></div>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2"><i class="bi bi-clipboard-check me-2"></i>My Enrollments</h1>
+                <a th:href="@{/enrollment/enroll}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-1"></i>Enroll in Course
+                </a>
+            </div>
+
+            <!-- Filter Tabs -->
+            <ul class="nav nav-tabs mb-3">
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${status == null or status == ''} ? 'active'"
+                       th:href="@{/enrollment/list}">All</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${status == 'APPROVED'} ? 'active'"
+                       th:href="@{/enrollment/list(status='APPROVED')}">Approved</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${status == 'PENDING'} ? 'active'"
+                       th:href="@{/enrollment/list(status='PENDING')}">Pending</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${status == 'DROPPED'} ? 'active'"
+                       th:href="@{/enrollment/list(status='DROPPED')}">Dropped</a>
+                </li>
+            </ul>
+
+            <!-- Enrollments Grid -->
+            <div class="row">
+                <div class="col-md-6 mb-4" th:each="enrollment : ${enrollments}">
+                    <div class="card h-100">
+                        <div class="card-header"
+                             th:classappend="${enrollment.status == 'APPROVED'} ? 'bg-success text-white' :
+                                                 ${enrollment.status == 'PENDING'} ? 'bg-warning' : 'bg-secondary text-white'">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0" th:text="${enrollment.course.courseCode}">CS101</h5>
+                                <span class="badge bg-light text-dark" th:text="${enrollment.status}">APPROVED</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-title" th:text="${enrollment.course.courseName}">Introduction to Programming</h6>
+
+                            <div class="mb-2">
+                                <small class="text-muted">
+                                    <i class="bi bi-person me-1"></i>
+                                    <span th:text="${(enrollment.course != null && enrollment.course.lecturer != null) ? enrollment.course.lecturer.fullName : 'TBA'}">John Doe</span>
+                                </small>
+                            </div>
+
+                            <div class="mb-2">
+                                <small class="text-muted">
+                                    <i class="bi bi-credit-card me-1"></i>
+                                    <span th:text="${enrollment.course.credits} + ' Credits'">3 Credits</span>
+                                </small>
+                            </div>
+
+                            <div class="mb-2">
+                                <small class="text-muted">
+                                    <i class="bi bi-calendar-event me-1"></i>
+                                    Enrolled: <span th:text="${#temporals.format(enrollment.enrolledAt, 'MMM dd, yyyy')}">Jan 15, 2024</span>
+                                </small>
+                            </div>
+
+                            <div th:if="${enrollment.grade != null}" class="mb-2">
+                                <strong>Grade: </strong>
+                                <span class="badge bg-primary" th:text="${enrollment.grade}">A</span>
+                            </div>
+
+                            <div th:if="${enrollment.remarks != null}" class="mb-2">
+                                <small class="text-muted" th:text="${enrollment.remarks}">Remarks</small>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="d-flex justify-content-between">
+                                <a th:href="@{/course/{id}(id=${enrollment.course.id})}"
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye me-1"></i>View Course
+                                </a>
+                                <button th:if="${enrollment.status == 'APPROVED'}"
+                                        type="button"
+                                        class="btn btn-sm btn-outline-danger"
+                                        onclick="confirmDrop(this)"
+                                        th:attr="data-id=${enrollment.id}">
+                                    <i class="bi bi-x-circle me-1"></i>Drop
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${#lists.isEmpty(enrollments)}" class="col-12">
+                    <div class="alert alert-info text-center">
+                        <i class="bi bi-info-circle me-2"></i>
+                        No enrollments found.
+                        <a th:href="@{/enrollment/enroll}" class="alert-link">Enroll in a course now!</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div th:replace="~{layout/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function confirmDrop(button) {
+        if (confirm('Are you sure you want to drop this course?')) {
+            const enrollmentId = button.getAttribute('data-id');
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/enrollment/drop/' + enrollmentId;
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script>
+</body>
+</html>
